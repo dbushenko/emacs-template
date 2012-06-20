@@ -2,11 +2,11 @@
 
 Supports the following types of tags:
 
-{{var}} -- substitute with the value of the var
-{{#sect}} -- beginning of section
-{{^sect}} -- beginning of inverted section
-{{/sect}} -- section ending
-{{>incl}} -- include template
+* {{var}} -- substitute with the value of the var
+* {{#sect}} -- beginning of section
+* {{^sect}} -- beginning of inverted section
+* {{/sect}} -- section ending
+* {{>incl}} -- include template
 
 If the section is nil, then its contents is not rendered. If the section is nil and is inverted, then its contents is rendered.
 
@@ -25,49 +25,49 @@ If the section is list, then it's rendered like a list.
 
 ## Example usage:
 
-(load-file "emacs-template.el")
-
-(setq templ "
-public class {{class}} {
-// Fields
-{{#fields}}
-private {{type}} {{name}};{{/fields}}
-
-// Accessors
-{{#fields}}
-{{>method}}
-{{/fields}}
-
-// Methods
-{{^toString}}
-public String toString() {
-  return {{#fields}}String.valueOf({{name}}){{^last}}+{{/last}}{{/fields}};
-}
-{{/toString}}
-
-{{#hidden}}
-This section will never show up!
-{{/hidden}}
-}")
-
-(setq method "public {{type}} get{{name}}() {
-return {{name}};
-}
-
-public void set{{name}}({{type}} val}} {
-{{name}} = val;
-}")
-
-(render-template templ
-		  (hash-map "fields" (list
-				      (hash-map "name" "Name"
-						"type" "String")
-				      (hash-map "name" "Age"
-						"type" "int"
-						"last" t))
-			    "class" "Person"
-			    "method" method
-			    "toString" nil
-			    "hidden" nil
-			    ))
+    (load-file "emacs-template.el")
+    
+    (setq templ "
+    public class {{class}} {
+    // Fields
+    {{#fields}}
+    private {{type}} {{name}};{{/fields}}
+    
+    // Accessors
+    {{#fields}}
+    {{>method}}
+    {{/fields}}
+    
+    // Methods
+    {{^toString}}
+    public String toString() {
+      return {{#fields}}String.valueOf({{name}}){{^last}}+{{/last}}{{/fields}};
+    }
+    {{/toString}}
+    
+    {{#hidden}}
+    This section will never show up!
+    {{/hidden}}
+    }")
+    
+    (setq method "public {{type}} get{{name}}() {
+    return {{name}};
+    }
+    
+    public void set{{name}}({{type}} val}} {
+    {{name}} = val;
+    }")
+    
+    (render-template templ
+    		  (hash-map "fields" (list
+    				      (hash-map "name" "Name"
+    						"type" "String")
+    				      (hash-map "name" "Age"
+    						"type" "int"
+    						"last" t))
+    			    "class" "Person"
+    			    "method" method
+    			    "toString" nil
+    			    "hidden" nil
+    			    ))
 
