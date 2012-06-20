@@ -1,4 +1,4 @@
-# Emacs Templating system inspired by Mustache 
+# Emacs templating system inspired by Mustache 
 (http://mustache.github.com/)
 
 Supports the following types of tags:
