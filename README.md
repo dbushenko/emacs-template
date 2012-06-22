@@ -11,6 +11,7 @@ Supports the following types of tags:
 * {{>incl}} -- include template
 
 You may use it just to substitute placeholders with variables.
+
     (render-template
             "{{action}} {{name}}!"
             (hash-map "action" "Hello"
