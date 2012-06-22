@@ -106,13 +106,16 @@ import com.adsl.demo.models.MyDemoActivityModel;
 public class {{view}} extends Activity implements Observer {
     // Members
 {{#accessors}}
-    private {{type}} _{{name}};{{/accessors}}
+    private {{type}} _{{name}};
+{{-accessors}}
 
 {{#controls}}
-    private {{type}} _{{name}};{{/controls}}
+    private {{type}} _{{name}};
+{{-controls}}
 
-    {{#actions}}
-    private {{type}} _{{name}};{{/actions}}
+{{#actions}}
+    private {{type}} _{{name}};
+{{-actions}}
     
 
     private {{controller}} controller;
@@ -134,8 +137,9 @@ public class {{view}} extends Activity implements Observer {
 		}
 	    };
 
-    {{#actions}}
-	_{{name}}.setOnClickListener(listener);{{/actions}}
+{{#actions}}
+	_{{name}}.setOnClickListener(listener);
+{{-actions}}
     }
 
     /** Called when the activity is first created. */
@@ -194,7 +198,8 @@ public class {{class}} {
     private {{model}} model;
 
 {{#accessors}}
-    private {{type}} _{{name}};{{/accessors}}
+    private {{type}} _{{name}};
+{{-accessors}}
 
     public void loadData({{view}} view) {
 	if (model.loadData(view)) {

@@ -114,6 +114,7 @@
   "Checks whether the title is variable"
   (and (not (emtempl/starts-with text "#"))
        (not (emtempl/starts-with text "/"))
+       (not (emtempl/starts-with text "-"))
        (not (emtempl/starts-with text ">"))
        (not (emtempl/starts-with text "^"))))
 
@@ -124,7 +125,8 @@
 
 (defun emtempl/endp (text)
   "Checks whether the title is section ending"
-  (emtempl/starts-with text "/"))
+  (or (emtempl/starts-with text "/")
+      (emtempl/starts-with text "-")))
 
 (defun emtempl/includep (text)
   "Checks whether the title is section including"
@@ -138,6 +140,7 @@
   "Gets the section title"
   (if (or (emtempl/starts-with text "#")
 	  (emtempl/starts-with text "/")
+	  (emtempl/starts-with text "-")
 	  (emtempl/starts-with text ">")
 	  (emtempl/starts-with text "^"))
       (substring text 1)
@@ -189,6 +192,17 @@
 	 (processed-text (render-template text new-params)))
     processed-text))
 
+(defun emtempl/checked-full-sect (name)
+  "Finds the nearest closing section."
+  (let* ((fs1 (emtempl/find-full-section template (concat "/" name) (gethash :end sect)))
+	 (fs2 (emtempl/find-full-section template (concat "-" name) (gethash :end sect))))
+    (cond
+     ((and (null fs2) (not (null fs1))) fs1)
+     ((and (null fs1) (not (null fs2))) fs2)
+     ((and (null fs1) (null fs2)) nil)
+     ((> (gethash :end fs1) (gethash :end fs2)) fs2)
+     ((< (gethash :end fs1) (gethash :end fs2)) fs1))))
+
 (defun emtempl/process-fragment (template sect params inverted)
   "Substitutes the found variable with the specified parameter"
   ;; Check if it's a non-empty list -- run as list
@@ -199,11 +213,12 @@
   (let* ((var-name (gethash :title sect))
 	 (name (emtempl/title var-name))
 	 (var-value (gethash name params))
-	 (full-sect (emtempl/find-full-section template (concat "/" name) (gethash :end sect)))
+	 (full-sect (emtempl/checked-full-sect name))
+	 (delta (if (string= (substring (gethash :title full-sect) 0 1) "-") -1 0))
 	 (section-title-length (+ 1 (emtempl/sect-length name)))
 	 (text (substring template
 			  (gethash :start full-sect)
-			  (- (gethash :end full-sect)
+			  (- (+ (gethash :end full-sect) delta)
 			     section-title-length)))
 	 (before (substring template 0 (- (gethash :start full-sect) section-title-length)))
 	 (after (substring template (gethash :end full-sect))))

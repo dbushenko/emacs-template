@@ -7,6 +7,7 @@ Supports the following types of tags:
 * {{#sect}} -- beginning of section
 * {{^sect}} -- beginning of inverted section
 * {{/sect}} -- section ending
+* {{-sect}} -- section ending without the last character (deletes last newline)
 * {{>incl}} -- include template
 
 You may use it just to substitute placeholders with variables.

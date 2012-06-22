@@ -15,7 +15,7 @@
 	    (actions Button okBtn
 		     Button cancelBtn)
 	    (view MyTestView)
-	    (model MyTestView))
+	    (model MyTestModel))
 
 (view MyTestView
       (model MyTestModel)
