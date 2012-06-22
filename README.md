@@ -63,8 +63,9 @@ If the section is list, then it's rendered like a list.
     (setq templ "
     public class {{class}} {
     // Fields
-    {{#fields}}
-    private {{type}} {{name}};{{/fields}}
+{{#fields}}
+    private {{type}} {{name}};
+{{-fields}}
     
     // Accessors
     {{#fields}}
