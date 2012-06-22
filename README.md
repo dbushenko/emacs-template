@@ -9,20 +9,50 @@ Supports the following types of tags:
 * {{/sect}} -- section ending
 * {{>incl}} -- include template
 
+You may use it just to substitute placeholders with variables.
+    (render-template
+            "{{action}} {{name}}!"
+            (hash-map "action" "Hello"
+                      "name" "World"))
+    ----------
+    Hello World!
+
 If the section is nil, then its contents is not rendered. If the section is nil and is inverted, then its contents is rendered.
 
-(render-template "{{#mysect}}not rendered{{/mysect}}" (hash-map "mysect" nil))
+    ;; Not rendered
+    (render-template 
+            "{{#mysect}}not rendered{{/mysect}}" 
+            (hash-map "mysect" nil))
+    ---------
+
+    ;; Rendered
+    (render-template 
+            "{{^mysect}}rendered{{/mysect}}" 
+            (hash-map "mysect" nil))
+    ---------
+    rendered
 
 If the section is hash-table, it's renderend, and its parameters are merged with the parent template parameters.
 
-(render-template "{{^mysect}}rendered{{/mysect}}" (hash-map "mysect" nil))
+    (render-template
+            "{#mysect}}{{action}} {{name}}!{{/mysect}}"
+            (hash-map "mysect" (hash-map "action" "Hello"  
+                                         "name" "World")))
+    ----------
+    Hello World!
+
 
 If the section is list, then it's rendered like a list.
 
-(render-template
-"{{#mysect}}{{action}} {{name}}!{{/mysect}}"
-(hash-map "mysect" (list (hash-map "action" "Hello"  "name" "World") (hash-map "action" "Welcome"  "name" "home"))))
-
+    (render-template
+            "{{#mysect}}{{action}} {{name}}!{{/mysect}}"
+            (hash-map "mysect" (list (hash-map "action" "Hello"
+                                               "name" "World") 
+                                     (hash-map "action" "Welcome"
+                                               "name" "home"))))
+    ----------
+    Hello World!
+    Welcome home
 
 ## Example usage:
 
